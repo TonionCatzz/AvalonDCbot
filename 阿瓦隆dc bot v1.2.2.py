@@ -224,8 +224,7 @@ async def room(ctx, room_number: str):
 
     if success:
         user_sessions[ctx.author.id] = driver
-        await ctx.send("💡 如果要記錄派票請打 `!record`")
-        await ctx.send("🎙️ 如果要加入語音請打 `!voice 語音房名`")   
+        await ctx.send("💡 如果要記錄派票請打 `!record`") 
     else:
         return
 
@@ -429,6 +428,7 @@ async def quit(ctx, member: discord.Member = None):
         await ctx.send(f"⚠️ 關閉 driver 時發生錯誤：{str(e)}")
 
 bot.run(TOKEN)
+
 
 
 
