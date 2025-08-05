@@ -232,8 +232,7 @@ async def room(ctx, room_number: str):
 
     if success:
         user_sessions[ctx.author.id] = driver
-        await ctx.send("💡 如果要記錄派票請打 `!record`")
-        await ctx.send("🎙️ 如果要加入語音請打 `!voice 語音房名`")   
+        await ctx.send("💡 如果要記錄派票請打 `!record`") 
     else:
         return
 
@@ -357,86 +356,6 @@ async def help(ctx):
     await ctx.send(embed=embed)
 
 
-#進出語音
-@bot.command()
-async def voice(ctx, *, name: str):
-    try:
-        # 如果已經在語音頻道，先離開
-        if ctx.voice_client:
-            await ctx.voice_client.disconnect()
-
-        # 嘗試根據名稱尋找語音頻道
-        for channel in ctx.guild.voice_channels:
-            if channel.name == name:
-                await channel.connect()
-                await ctx.send(f"🎧 已加入語音頻道：{channel.name}")
-                await ctx.send("請使用 `！cdtime` 監控派票倒數")
-                return
-
-        # 沒有找到
-        await ctx.send("❌ 沒有找到這個語音頻道。")
-
-    except discord.ClientException as e:
-        await ctx.send(f"⚠️ 無法加入語音頻道：{e}")
-    except discord.Forbidden:
-        await ctx.send("🚫 機器人沒有加入語音頻道的權限。")
-    except Exception as e:
-        await ctx.send(f"❗ 發生錯誤：{e}")
-@bot.command()
-async def leave(ctx):
-    if ctx.voice_client:
-        await ctx.voice_client.disconnect()
-        await ctx.send("👋 已離開語音頻道。")
-    else:
-        await ctx.send("❌ 我沒有在語音頻道中。")
-
-#下一個目標
-@bot.command()
-async def cdtime(ctx):
-    total_seconds = 120
-    #message = await ctx.send(f"⏳ 倒數開始：{total_seconds} 秒")
-
-    driver = user_sessions.get(ctx.author.id)
-    if not driver:
-        await ctx.send("❌ 請先打 `!room 房號` 加入房間")
-        return
-
-    # 初始記錄目標元素內容
-    try:
-        target_element = driver.find_element(By.CSS_SELECTOR, "#your-element-id")
-        last_content = target_element.text
-    except:
-        last_content = ""
-
-    played_audio = False
-
-    while total_seconds > 0:
-        await asyncio.sleep(1)
-        total_seconds -= 1
-
-        # 檢查網頁元素是否變化
-        try:
-            current_element = driver.find_element(By.CSS_SELECTOR, "#your-element-id")
-            current_content = current_element.text
-            if current_content != last_content:
-                last_content = current_content
-                total_seconds = 120
-                #await ctx.send("🔄 偵測到網頁元素更新，重設倒數為 120 秒")
-        except:
-            pass  # 找不到也無視
-
-        # 播放語音在剩下 60 秒
-        if total_seconds == 60 and not played_audio:
-            if ctx.author.voice:
-                voice_channel = ctx.author.voice.channel
-                voice_client = await voice_channel.connect()
-                voice_client.play(discord.FFmpegPCMAudio("a.mp3"))#要改語音
-                #await ctx.send("📢 60 秒剩餘，播放語音提醒！")
-                played_audio = True
-            #else:
-                #await ctx.send("⚠️ 你不在語音頻道，無法播放語音。")
-    #await ctx.send("⏰ 倒數結束！")
-
 #修改內文
 @bot.command()
 async def 修改(ctx, *, title: str):
@@ -515,5 +434,6 @@ async def quit(ctx, member: discord.Member = None):
         await ctx.send(f"⚠️ 關閉 driver 時發生錯誤：{str(e)}")
 
 bot.run(TOKEN)
+
 
 
