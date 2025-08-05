@@ -25,4 +25,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # 啟動 bot
-CMD ["python", "阿瓦隆dc bot v1.2.1.py"]
+CMD ["python", "阿瓦隆dc bot v1.2.2.py"]
