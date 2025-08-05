@@ -1,12 +1,3 @@
-#阿瓦隆dc bot v1.2
-#新增修改bot貼文
-#新增掛掉的時候關掉driver，!quit
-
-###############################
-#阿瓦隆dc bot v1.1
-#新增bot自動論壇貼文
-#新增tag
-
 import discord
 from discord.ext import commands
 from discord import Embed
@@ -436,5 +427,6 @@ async def quit(ctx, member: discord.Member = None):
         await ctx.send(f"⚠️ 關閉 driver 時發生錯誤：{str(e)}")
 
 bot.run(TOKEN)
+
 
 
