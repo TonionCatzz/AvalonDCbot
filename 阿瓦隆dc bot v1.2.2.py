@@ -9,6 +9,22 @@ import asyncio
 import re
 import os
 from datetime import datetime
+from flask import Flask
+import threading
+
+########################
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return "Bot is running."
+
+def run_web():
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
+    
+threading.Thread(target=run_web).start()
+######################################################
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 intents = discord.Intents.default()
@@ -427,6 +443,7 @@ async def quit(ctx, member: discord.Member = None):
         await ctx.send(f"⚠️ 關閉 driver 時發生錯誤：{str(e)}")
 
 bot.run(TOKEN)
+
 
 
 
