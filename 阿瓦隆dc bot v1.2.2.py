@@ -16,7 +16,7 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 intents = discord.Intents.default()
 intents.message_content = True
 intents.voice_states = True
-bot = commands.Bot(command_prefix="!",intents=intents,help_command=None)
+bot = commands.Bot(command_prefix="+",intents=intents,help_command=None)
 user_sessions = {}  # user_id: driver
 # 用來記錄日期與場次次數（記憶體內部保存）
 last_date = None
@@ -64,7 +64,7 @@ def join_room(room_input):
                 continue
         if not found:
             driver.quit()
-            return False, None, f"❌ 找不到房間 #room_{room_input}，請重新輸入!room 房號"
+            return False, None, f"❌ 找不到房間 #room_{room_input}，請重新輸入`+room 房號`"
     except Exception as e:
         return False, f"⚠️ 發生錯誤：{e}"
 
@@ -214,7 +214,7 @@ async def on_ready():
 @bot.command()
 async def room(ctx, room_number: str):
     # 限制只能在 #活動 頻道使用(可以自行變更)
-    if ctx.channel.name != "活動":#看要加在哪一個頻道
+    if ctx.channel.name != "紀錄爬蟲用":#看要加在哪一個頻道
         await ctx.send("❌ 這個指令只能在 #紀錄爬蟲用 頻道使用！")
         return
 
@@ -224,7 +224,7 @@ async def room(ctx, room_number: str):
 
     if success:
         user_sessions[ctx.author.id] = driver
-        await ctx.send("💡 如果要記錄派票請打 `!record`") 
+        await ctx.send("💡 如果要記錄派票請打 `+record`") 
     else:
         return
 
@@ -234,7 +234,7 @@ async def room(ctx, room_number: str):
 async def record(ctx):
     driver = user_sessions.get(ctx.author.id)
     if not driver:
-        await ctx.send("❌ 請先使用 `!room 房號` 指令進入房間！")
+        await ctx.send("❌ 請先使用 `+room 房號` 指令進入房間！")
         return
     await ctx.send("請輸入局數、湖中、刺殺誰(沒有刺殺請打X)：")
     #await ctx.send("範例1 ：34o5-->3局，0湖4好，三藍刺殺5")
@@ -278,7 +278,7 @@ async def record(ctx):
         await ctx.send(f"標籤：⚔️線瓦 {msg_tag}")
 
         # ✅ 發到論壇頻道
-        forum_channel = bot.get_channel(1399732441115004978)  #更改論壇ID 1132683080134578276
+        forum_channel = bot.get_channel(1132683080134578276)  #更改論壇ID 測試：1399732441115004978
         if isinstance(forum_channel, discord.ForumChannel):
             # 正確地找出 tag 物件
             tag1 = discord.utils.get(forum_channel.available_tags, name = "線瓦")
@@ -324,25 +324,25 @@ async def help(ctx):
 
     embed.add_field(
         name="🎯 **進入房間**",
-        value="🔹 指令：`!room 房號`\n🔹 範例：`!room 50`\n🔹 功能：進入指定房間的觀眾席。",
+        value="🔹 指令：`+room 房號`\n🔹 範例：`+room 50`\n🔹 功能：進入指定房間的觀眾席。",
         inline=False
     )
 
     embed.add_field(
         name="📝 **記錄派票紀錄**",
-        value="🔹 指令：`!record`\n🔹 功能：進房成功後，記錄牌局結束後的派票資訊。\n🔹 範例1 ：34o5-->3局，0湖4好，三藍刺殺5\n🔹 範例2 ：54o8o1xx-->5局，0湖4好、4湖8好、8湖1壞，三紅沒有刺殺",
+        value="🔹 指令：`+record`\n🔹 功能：進房成功後，記錄牌局結束後的派票資訊。\n🔹 範例1 ：34o5-->3局，0湖4好，三藍刺殺5\n🔹 範例2 ：54o8o1xx-->5局，0湖4好、4湖8好、8湖1壞，三紅沒有刺殺",
         inline=False
     )
 
     embed.add_field(
         name="📝 **貼文內容修改**",
-        value="🔹 指令：`!修改 貼文標題`\n🔹 功能：可修改貼文錯誤的內容，請修改後將所以文字貼上。\n🔹 範例：!修改 0731一般場1",
+        value="🔹 指令：`+修改 貼文標題`\n🔹 功能：可修改貼文錯誤的內容，請修改後將所以文字貼上。\n🔹 範例：+修改 0731一般場1",
         inline=False
     )
 
     embed.add_field(
         name="📝 **貼文內容修改**",
-        value="🔹 指令：`!quit`\n🔹 功能：掛掉的時候，關掉driver。",
+        value="🔹 指令：`+quit`\n🔹 功能：掛掉的時候，關掉driver。",
         inline=False
     )
 
@@ -354,7 +354,7 @@ async def help(ctx):
 @bot.command()
 async def 修改(ctx, *, title: str):
     """根據論壇標題修改主題內容"""
-    forum_channel = bot.get_channel(1399732441115004978)  # 替換成你的論壇頻道 ID 1132683080134578276
+    forum_channel = bot.get_channel(1132683080134578276)  # 替換成你的論壇頻道 ID 測試：1399732441115004978
 
     if not isinstance(forum_channel, discord.ForumChannel):
         await ctx.send("❌ 找不到正確的論壇頻道，請確認 ID 是否正確。")
@@ -428,6 +428,7 @@ async def quit(ctx, member: discord.Member = None):
         await ctx.send(f"⚠️ 關閉 driver 時發生錯誤：{str(e)}")
 
 bot.run(TOKEN)
+
 
 
 
