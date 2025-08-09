@@ -4,7 +4,7 @@ from discord import Embed
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
+#from webdriver_manager.chrome import ChromeDriverManager
 import time
 import asyncio
 import re
@@ -33,8 +33,8 @@ def join_room(room_input):
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--window-size=1280,1080')
-        #driver=webdriver.Chrome(options=options)
-        driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+        driver=webdriver.Chrome(options=options)
+        #driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
         ult="https://avalon.signage-cloud.org/" #可改
         driver.get(ult)
         username=driver.find_element(By.CLASS_NAME,"form-control")
@@ -430,6 +430,7 @@ async def quit(ctx, member: discord.Member = None):
         await ctx.send(f"⚠️ 關閉 driver 時發生錯誤：{str(e)}")
 
 bot.run(TOKEN)
+
 
 
 
