@@ -400,8 +400,8 @@ async def quit(ctx, member: discord.Member = None):
     """
     結束指定成員的 driver（限管理員），如果沒指定則結束自己的。
     使用方式：
-    !quit              --> 結束自己的 driver
-    !quit @某人         --> 管理員可結束別人的 driver
+    +quit              --> 結束自己的 driver
+    +quit @某人         --> 管理員可結束別人的 driver
     """
     # 預設為自己
     target_member = member or ctx.author
@@ -430,6 +430,7 @@ async def quit(ctx, member: discord.Member = None):
         await ctx.send(f"⚠️ 關閉 driver 時發生錯誤：{str(e)}")
 
 bot.run(TOKEN)
+
 
 
 
