@@ -25,7 +25,7 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 intents = discord.Intents.default()
 intents.message_content = True
 intents.voice_states = True
-bot = commands.Bot(command_prefix="-",intents=intents,help_command=None)
+bot = commands.Bot(command_prefix="!",intents=intents,help_command=None)
 user_sessions = {}  # user_id: driver
 # 用來記錄日期與場次次數（記憶體內部保存）
 last_date = None
@@ -435,5 +435,6 @@ async def quit(ctx, member: discord.Member = None):
         await ctx.send(f"⚠️ 關閉 driver 時發生錯誤：{str(e)}")
 
 bot.run(TOKEN)
+
 
 
