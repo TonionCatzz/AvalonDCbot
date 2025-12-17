@@ -75,7 +75,7 @@ def join_room(room_input):
             driver.quit()
             return False, None, f"❌ 找不到房間 #room_{room_input}，請重新輸入!room 房號"
     except Exception as e:
-        return False, f"⚠️ 發生錯誤：{e}"
+        return False, None, f"⚠️ 發生錯誤：{e}"
 
 ########################################################################################################################################
 #記錄派票
@@ -435,6 +435,7 @@ async def quit(ctx, member: discord.Member = None):
         await ctx.send(f"⚠️ 關閉 driver 時發生錯誤：{str(e)}")
 
 bot.run(TOKEN)
+
 
 
 
