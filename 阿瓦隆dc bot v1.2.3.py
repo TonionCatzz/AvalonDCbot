@@ -210,7 +210,7 @@ def record_after_game(driver,input_value):
         return True,player_role,player_list,"\n".join(ticket_record),kill,tag
     
     except Exception as e:
-        return False, f"⚠️ 發生錯誤：{e}"
+        return False, f"⚠️ 發生錯誤：{e}", "", "", "", ""
 
 ####################################################################
 #Bot回應
@@ -435,6 +435,7 @@ async def quit(ctx, member: discord.Member = None):
         await ctx.send(f"⚠️ 關閉 driver 時發生錯誤：{str(e)}")
 
 bot.run(TOKEN)
+
 
 
 
